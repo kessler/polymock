@@ -72,8 +72,11 @@ constructs a polymock
 can also override enumerable and configurable options of Object.defineProperty (but not get/set) using these options
 ###PolyMock.create(methods, properties, Fn, args)
 ***methods*** - can be an array; ['foo', 'bar'] or an object { 'foo': { returnValue: 5 } }
+
 ***properties*** - can be an array; ['foo', 'bar'] or an object { 'foo': { initialValue: 5 } }
+
 ***Fn*** - see Ctor()
+
 ***Args*** - see Ctor()
 
 ## Contributing
