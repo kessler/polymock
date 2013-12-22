@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "lib/PolyMock.js",
   "scripts": {
-    "test": "grunt-mocha-test"
+    "test": "grunt"
   },
   "description": "mock objects generator",
   "homepage": "https://github.com/kessler/polymock",
