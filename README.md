@@ -27,6 +27,7 @@ var x = mock.object.foo('x', function myCallback(val) {
 console.log(mock.object.bar); // prints 5
 // mock.invocations[1].property === 'bar';
 // mock.invocations[1].operation === 'get';
+// mock.invocations[1].value === 5;
 
 
 mock.object.bar = 2;
