@@ -1,6 +1,6 @@
 {
   "name": "polymock",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "main": "lib/PolyMock.js",
   "description": "mock objects generator",
   "homepage": "https://github.com/kessler/polymock",
