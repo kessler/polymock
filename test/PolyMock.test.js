@@ -21,29 +21,32 @@ describe('Mock', function () {
 		assert.ok('foo' in mock.metadata, 'expected to find foo in metadata: ' + $u.inspect(mock.metadata));
 		assert.ok('bar' in mock.metadata, 'expected to find bar in metadata: ' + $u.inspect(mock.metadata));
 
-		assert.ok($u.isArray(mock.metadata.foo.invocations), 'expected mock.metadata.foo.invocations to be an array');
-		assert.ok($u.isArray(mock.metadata.bar.invocations), 'expected mock.metadata.bar.invocations to be an array');
 
-		assert.strictEqual(mock.metadata.foo.invocations.length, 0, 'expected mock.metadata.foo.invocations to be an empty array');
-		assert.strictEqual(mock.metadata.bar.invocations.length, 0, 'expected mock.metadata.bar.invocations to be an empty array');
+	});
+
+	it('records function invocations', function () {
+
+		var mock = new PolyMock();
+
+		mock.createMethod('foo');
+		mock.createMethod('bar');
 
 		mock.object.foo(1, 2);
 
-		assert.ok(mock.metadata.foo.invocations.length, 1, 'expected to find 1 invocation in mock.metadata.foo.invocations');
+		assert.ok(mock.invocations.length, 1, 'expected to find 1 invocation in mock.metadata.foo.invocations');
 
-		assert.ok(mock.metadata.foo.invocations[0].length, 2);
-
-		assert.strictEqual(mock.metadata.foo.invocations[0].indexOf(1), 0, 'expected to find \'1\' at position 0 in mock.metadata.foo.invocations');
-		assert.strictEqual(mock.metadata.foo.invocations[0].indexOf(2), 1, 'expected to find \'2\' at position 1 in mock.metadata.foo.invocations');
+		assert.strictEqual(mock.invocations[0].method, 'foo');
+		assert.strictEqual(mock.invocations[0].arguments[0], 1);
+		assert.strictEqual(mock.invocations[0].arguments[1], 2);
 
 		mock.object.foo(2, 3);
 		mock.object.bar(123);
 
 		assert.strictEqual(mock.invocations.length, 3);
 
-		assert.strictEqual(mock.invocations[0], 'foo');
-		assert.strictEqual(mock.invocations[1], 'foo');
-		assert.strictEqual(mock.invocations[2], 'bar');
+		assert.strictEqual(mock.invocations[0].method, 'foo');
+		assert.strictEqual(mock.invocations[1].method, 'foo');
+		assert.strictEqual(mock.invocations[2].method, 'bar');
 	});
 
 	it('fires the callback of the "real" method with predefined arguments', function (done) {
@@ -68,21 +71,37 @@ describe('Mock', function () {
 
 		var mock = new PolyMock();
 
-		mock.createProperty('foo');
+		mock.createProperty('foo', { initialValue: 5 });
 
-		mock.object.foo = 1;
-		mock.object.foo = 2;
+		assert.ok('foo' in mock.metadata);
+		assert.strictEqual(mock.metadata.foo.myValue, 5);
+		assert.strictEqual(mock.object.foo, 5);
+	});
+
+	it('records property operations', function () {
+		var mock = new PolyMock();
+
+		mock.createProperty('foo', { initialValue: 5 });
 
 		console.log(mock.object.foo);
 
-		assert.strictEqual(mock.invocations.length, 3);
-		assert.strictEqual(mock.invocations[0], 'set_foo');
-		assert.strictEqual(mock.invocations[1], 'set_foo');
-		assert.strictEqual(mock.invocations[2], 'get_foo');
+		assert.strictEqual(mock.invocations.length, 1);
+		assert.strictEqual(mock.invocations[0].property, 'foo');
+		assert.strictEqual(mock.invocations[0].operation, 'get'); //get from assert
 
-		assert.strictEqual(mock.metadata.foo.assignments.length, 2);
-		assert.strictEqual(mock.metadata.foo.assignments[0], 1);
-		assert.strictEqual(mock.metadata.foo.assignments[1], 2);
+		mock.object.foo = 1;
+		assert.strictEqual(mock.invocations.length, 2);
+		assert.strictEqual(mock.invocations[1].property, 'foo');
+		assert.strictEqual(mock.invocations[1].operation, 'set');
+		assert.strictEqual(mock.invocations[1].value, 1);
+
+		mock.object.foo = 2;
+		assert.strictEqual(mock.invocations.length, 3);
+		assert.strictEqual(mock.invocations[2].property, 'foo');
+		assert.strictEqual(mock.invocations[2].operation, 'set');
+		assert.strictEqual(mock.invocations[2].value, 2);
+
+		assert.strictEqual(mock.object.foo, 2);
 	});
 
 	it('uses a prototype given for the mock object', function () {
