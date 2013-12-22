@@ -2,7 +2,9 @@
   "name": "polymock",
   "version": "1.0.0",
   "main": "lib/PolyMock.js",
-  "test": "mocha",
+  "scripts": {
+    "test": "mocha"
+  },
   "description": "mock objects generator",
   "homepage": "https://github.com/kessler/polymock",
   "bugs": "https://github.com/kessler/polymock/issues",
