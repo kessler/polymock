@@ -4,7 +4,7 @@ var $u = require('util');
 
 describe('Mock', function () {
 
-	it('creates functions and record their invocations and arguments used', function () {
+	it('creates methods', function () {
 
 		var mock = new PolyMock();
 
@@ -21,10 +21,19 @@ describe('Mock', function () {
 		assert.ok('foo' in mock.metadata, 'expected to find foo in metadata: ' + $u.inspect(mock.metadata));
 		assert.ok('bar' in mock.metadata, 'expected to find bar in metadata: ' + $u.inspect(mock.metadata));
 
-
 	});
 
-	it('records function invocations', function () {
+	it('can have dynamic return values for mock methods', function () {
+		var mock = new PolyMock();
+
+		mock.createMethod('foo', { returnValue: function (a) { return a * 2; }});
+
+		var result = mock.object.foo(2);
+
+		assert.strictEqual(result, 4);
+	});
+
+	it('records method invocations and arguments', function () {
 
 		var mock = new PolyMock();
 
@@ -67,7 +76,7 @@ describe('Mock', function () {
 		mock.object.bar(2, callback);
 	});
 
-	it('creates properties and record their assignments and invocations', function () {
+	it('creates properties', function () {
 
 		var mock = new PolyMock();
 
@@ -104,7 +113,7 @@ describe('Mock', function () {
 		assert.strictEqual(mock.object.foo, 2);
 	});
 
-	it('uses a prototype given for the mock object', function () {
+	it('uses a prototype for the mock object', function () {
 
 		function SomeClass(a) {
 			this.a = a;
