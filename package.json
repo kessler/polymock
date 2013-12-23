@@ -1,6 +1,6 @@
 {
   "name": "polymock",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "main": "lib/PolyMock.js",
   "scripts": {
     "test": "grunt"

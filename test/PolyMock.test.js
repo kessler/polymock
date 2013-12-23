@@ -26,7 +26,7 @@ describe('Mock', function () {
 	it('can have dynamic return values for mock methods', function () {
 		var mock = new PolyMock();
 
-		mock.createMethod('foo', { returnValue: function (a) { return a * 2; }});
+		mock.createMethod('foo', undefined, { dynamicValue: function (a) { return a * 2; } });
 
 		var result = mock.object.foo(2);
 
@@ -63,7 +63,7 @@ describe('Mock', function () {
 		var mock = new PolyMock();
 
 		mock.createMethod('foo');
-		mock.createMethod('bar', { callbackArgs: [1, 2] });
+		mock.createMethod('bar', undefined, { callbackArgs: [1, 2] });
 
 		function callback(a, b) {
 			assert.strictEqual(a, 1);
@@ -80,7 +80,7 @@ describe('Mock', function () {
 
 		var mock = new PolyMock();
 
-		mock.createProperty('foo', { initialValue: 5 });
+		mock.createProperty('foo', 5);
 
 		assert.ok('foo' in mock.metadata);
 		assert.strictEqual(mock.metadata.foo.myValue, 5);
@@ -90,7 +90,7 @@ describe('Mock', function () {
 	it('records property operations', function () {
 		var mock = new PolyMock();
 
-		mock.createProperty('foo', { initialValue: 5 });
+		mock.createProperty('foo', 5);
 
 		console.log(mock.object.foo);
 
@@ -127,35 +127,5 @@ describe('Mock', function () {
 	});
 
 	describe('factory method', function () {
-
-		it('creates a mock using arrays', function () {
-
-			var mock = PolyMock.create(['foo'], ['boo']);
-
-			assert.ok('foo' in mock.metadata);
-			assert.ok('boo' in mock.metadata);
-		});
-
-		it ('creates a mock using objects', function () {
-
-			var methods = {
-				'foo': {
-					options: {
-						callbackArgs: [1,2,3]
-					}
-				}
-			};
-
-			var properties = {
-				'moo': {}
-			};
-
-			var mock = PolyMock.create(methods, properties);
-
-			assert.ok('foo' in mock.metadata);
-			assert.strictEqual(mock.metadata.foo.callbackArgs.length, 3);
-
-			assert.ok('moo' in mock.metadata);
-		});
 	});
 });

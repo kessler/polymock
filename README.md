@@ -12,9 +12,9 @@ var PolyMock = require('polymock');
 
 var mock = PolyMock.create();
 
-mock.createMethod('foo', { returnValue: 1, invokeCallback: true, callbackArgs: [ 2 ]});
+mock.createMethod('foo', 1, { invokeCallback: true, callbackArgs: [ 2 ] });
 
-mock.createProperty('bar', { initialValue: 5 });
+mock.createProperty('bar', 5);
 
 // x === 1
 var x = mock.object.foo('x', function myCallback(val) {
@@ -45,23 +45,27 @@ constructs a polymock
 
 ***args*** - if the above prototype needs arguments in its "new" clause this is how to supply them
 
-### PolyMock.prototype.createMethod = function(method, options)
+### PolyMock.prototype.createMethod = function(method, returnValue, options)
 ***method*** - name of the method to create
+
+***returnValue*** - anything is permitted here.
+```
+	// will return 5 will mock.object.foo() is invoked
+	mock.createMethod('foo', 5);
+
+	// will return the result of invoking the dynamicValue function with scope mock.object
+	mock.createMethod('foo', 'dontcare', { dynamicValue: function(a) { return 2 * a; } });
+```
+When dynamic value is provided in the options the return value is ignored
 
 ***options***
 ```
 	{
-		returnValue: 5,	// return value of the method
 		invokeCallback: true, // automatically invoke the last argument if its a function, defaults to true
 		callbackArgs: [1, 2] // arguments to use in callback
 	}
-
-	// returnValue can also be a function
-	{
-		returnValue: function (a, b, c) { return a * b * c; }
-	}
 ```
-### PolyMock.prototype.createProperty = function(name, options)
+### PolyMock.prototype.createProperty = function(name, initialValue, options)
 ***name*** - name of the property
 
 ***options***
@@ -71,11 +75,7 @@ constructs a polymock
 	}
 ```
 can also override enumerable and configurable options of Object.defineProperty (but not get/set) using these options
-###PolyMock.create(methods, properties, Fn, args)
-***methods*** - can be an array; ['foo', 'bar'] or an object { 'foo': { returnValue: 5 } }
-
-***properties*** - can be an array; ['foo', 'bar'] or an object { 'foo': { initialValue: 5 } }
-
+###PolyMock.create(Fn, args)
 ***Fn*** - see Ctor()
 
 ***Args*** - see Ctor()
