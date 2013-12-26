@@ -76,6 +76,22 @@ describe('Mock', function () {
 		mock.object.bar(2, callback);
 	});
 
+	it('does not fires the callback of the "real" method when invokeCallback is set to false', function () {
+
+		var mock = new PolyMock();
+
+		mock.createMethod('bar', undefined, { invokeCallback: false });
+
+		var cbFired = false;
+		function callback() {
+			cbFired = true;
+		}
+
+		mock.object.bar(2, callback);
+
+		assert.strictEqual(cbFired, false, 'callback should not have fired');
+	});
+
 	it('creates properties', function () {
 
 		var mock = new PolyMock();
