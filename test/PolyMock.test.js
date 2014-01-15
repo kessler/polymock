@@ -1,4 +1,5 @@
 var PolyMock = require('../lib/PolyMock.js');
+var EventEmitter = require('events').EventEmitter;
 var assert = require('assert');
 var $u = require('util');
 
@@ -141,6 +142,42 @@ describe('Mock', function () {
 
 		assert.ok(mock.object instanceof SomeClass);
 	});
+
+	it('adds EventEmitter behavior', function () {
+		var mock = new PolyMock();
+
+		assert.strictEqual(mock.emitter, undefined);
+
+		mock.createEventEmitter();
+
+		assert.ok(mock.emitter instanceof EventEmitter);
+		assert.ok('on' in mock.metadata);
+		assert.ok('emit' in mock.metadata);
+	});
+
+	it('proxies emitter on() method from the mock to the really emitter and vice versa', function (done) {
+
+		var mock = new PolyMock();
+
+		mock.createEventEmitter();
+
+		mock.object.on('event', done);
+
+		mock.emitter.emit('event');
+	});
+
+	it('proxies emitter emit() method from the mock to the really emitter and vice versa', function (done) {
+
+		var mock = new PolyMock();
+
+		mock.createEventEmitter();
+
+		mock.emitter.on('event', done);
+
+		mock.object.emit('event');
+	});
+
+
 
 	describe('factory method', function () {
 	});
