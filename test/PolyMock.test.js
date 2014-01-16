@@ -152,6 +152,7 @@ describe('Mock', function () {
 
 		assert.ok(mock.emitter instanceof EventEmitter);
 		assert.ok('on' in mock.metadata);
+		assert.ok('once' in mock.metadata);
 		assert.ok('emit' in mock.metadata);
 	});
 
@@ -165,6 +166,18 @@ describe('Mock', function () {
 
 		mock.emitter.emit('event');
 	});
+
+	it('proxies emitter once() method from the mock to the really emitter and vice versa', function (done) {
+
+		var mock = new PolyMock();
+
+		mock.createEventEmitter();
+
+		mock.object.once('event', done);
+
+		mock.emitter.emit('event');
+	});
+
 
 	it('proxies emitter emit() method from the mock to the really emitter and vice versa', function (done) {
 
