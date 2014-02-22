@@ -12,7 +12,7 @@ var PolyMock = require('polymock');
 
 var mock = PolyMock.create();
 
-mock.createMethod('foo', 1, { invokeCallback: true, callbackArgs: [ 2 ] });
+mock.createMethod('foo', 1, { callbackArgs: [ 2 ] });
 
 mock.createProperty('bar', 5);
 
