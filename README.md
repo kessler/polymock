@@ -1,4 +1,4 @@
-# polymock [![Build Status](https://secure.travis-ci.org/kessler/polymock.png?branch=master)](http://travis-ci.org/kessler/polymock)
+# [DISCONTINUED] polymock [![Build Status](https://secure.travis-ci.org/kessler/polymock.png?branch=master)](http://travis-ci.org/kessler/polymock)
 
 mock objects generator
 
